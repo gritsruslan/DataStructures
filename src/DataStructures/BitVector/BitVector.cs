@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace DataStructures.BitVector;
 
 public class BitVector
@@ -7,11 +9,15 @@ public class BitVector
 
 	public readonly int Size;
 
+	private const int UintSize = sizeof(uint) * 8;
+
 	// Create BitVector with specified size
 	public BitVector(int size)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
+
 		Size = size;
-		int arraySize = (int)Math.Ceiling((float)size / sizeof(uint));
+		int arraySize = (int)Math.Ceiling((float)size / UintSize);
 		_data = new uint[arraySize];
 	}
 
@@ -44,7 +50,7 @@ public class BitVector
 
 		var (row, column) = GetBitCoordinates(index);
 
-		_data[row] ^= (uint) 1 << column;
+		_data[row] &= (uint)~(1 << column);
 	}
 
 	// Inverse the bit at the specified index
@@ -53,7 +59,7 @@ public class BitVector
 		ThrowIfIndexOutOfRange(index);
 		var (row, column) = GetBitCoordinates(index);
 
-		_data[row] &= (uint)~(1 << column);
+		_data[row] ^= (uint) 1 << column;
 	}
 
 	// Return true if the bit at specified index is 1, else return false
@@ -62,13 +68,13 @@ public class BitVector
 		ThrowIfIndexOutOfRange(index);
 		var (row, column) = GetBitCoordinates(index);
 
-		return (_data[row] & (1 << column)) == 1;
+		return (_data[row] & (1 << column)) != 0;
 	}
 
 	private (int, int) GetBitCoordinates(int index)
 	{
-		int row = index / sizeof(uint);
-		int column = index % sizeof(uint);
+		int row = index / UintSize;
+		int column = index % UintSize;
 		return (row, column);
 	}
 
