@@ -27,7 +27,6 @@ public class MyStack<T> : IEnumerable<T>
 
 	public MyStack(int capacity)
 	{
-		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity);
 		_data = new T[capacity];
 	}
 
@@ -154,7 +153,8 @@ public class MyStack<T> : IEnumerable<T>
 		if (Capacity == int.MaxValue)
 			throw new Exception();
 
-		uint newArraySize = (uint)(Capacity + Math.Ceiling(Capacity / 2.0));
+		uint newArraySize = Capacity == 0 ? DefaultCapacity :
+			(uint)(Capacity + Math.Ceiling(Capacity / 2.0));
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;
