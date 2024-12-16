@@ -2,13 +2,8 @@
 
 using DataStructures.BitVector;
 using DataStructures.List;
+using DataStructures.Queue;
+using DataStructures.Stack;
 
-MyList<int> ls = [1, 2, 3, 4, 5];
-
-foreach (var item in ls)
-{
-	Console.WriteLine(item);
-}
-
-
+MyStack<int> stack = new[] { 1, 2, 3, };
 
