@@ -194,6 +194,7 @@ public class MyList<T> : IList<T>
 		public MyListEnumerator(MyList<T> list)
 		{
 			_list = list;
+			_index = -1;
 		}
 
 		private MyList<T> _list;
