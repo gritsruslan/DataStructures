@@ -28,6 +28,11 @@ public class MyList<T> : IList<T>
 		}
 	}
 
+	public MyList()
+	{
+		_data = new T[DefaultCapacity];
+	}
+
 	public MyList(int capacity)
 	{
 		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity);
@@ -163,7 +168,7 @@ public class MyList<T> : IList<T>
 		if (Capacity == int.MaxValue)
 			throw new Exception();
 
-		uint newArraySize = (uint)(Capacity + Math.Round(Capacity / 2.0));
+		uint newArraySize = (uint)(Capacity + Math.Ceiling(Capacity / 2.0));
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;
