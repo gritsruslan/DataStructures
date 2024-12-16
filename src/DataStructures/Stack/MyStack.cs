@@ -27,6 +27,7 @@ public class MyStack<T> : IEnumerable<T>
 
 	public MyStack(int capacity)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegative(capacity);
 		_data = new T[capacity];
 	}
 

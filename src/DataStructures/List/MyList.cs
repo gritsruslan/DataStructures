@@ -35,6 +35,7 @@ public class MyList<T> : IList<T>
 
 	public MyList(int capacity)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegative(capacity);
 		_data = new T[capacity];
 	}
 
