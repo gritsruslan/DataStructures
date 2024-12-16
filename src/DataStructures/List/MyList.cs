@@ -52,6 +52,8 @@ public class MyList<T> : IList<T>
 				_data = new T[colCount];
 				collection.CopyTo(_data, 0);
 			}
+
+			Count = colCount;
 		}
 		else
 		{
@@ -59,8 +61,11 @@ public class MyList<T> : IList<T>
 
 			using var enumerator = enumerable.GetEnumerator();
 
-			while(enumerator.MoveNext())
+			while (enumerator.MoveNext())
+			{
 				Add(enumerator.Current);
+				Count++;
+			}
 		}
 	}
 
