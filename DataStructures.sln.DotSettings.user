@@ -1,6 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cb1545cc_002Dfe62_002D4504_002D823e_002Dc131888bf104/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BitVectorUnitTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::ECF3E746-2DBD-4F74-ADF5-8B72C09C55C1::net8.0::DataStructuresTests.BitVectorUnitTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;Project Location="D:\Programing\GitHub Projects\DataStructures\tests\DataStructuresTests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;DataStructuresTests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
