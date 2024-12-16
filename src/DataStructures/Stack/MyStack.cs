@@ -4,7 +4,7 @@ using DataStructures.List;
 
 namespace DataStructures.Stack;
 
-public class MyStack<T> : ICollection, IEnumerable<T>
+public class MyStack<T> : IEnumerable<T>
 {
 	private const int DefaultCapacity = 5;
 
@@ -116,11 +116,6 @@ public class MyStack<T> : ICollection, IEnumerable<T>
 		return true;
 	}
 
-	public void CopyTo(Array array, int index)
-	{
-		throw new NotImplementedException();
-	}
-
 	public void CopyTo(T[] array, int arrayIndex)
 	{
 		if (arrayIndex < 0 || arrayIndex >= array.Length)
@@ -136,9 +131,7 @@ public class MyStack<T> : ICollection, IEnumerable<T>
 
 		for (int i = 0; i < Count; i++)
 		{
-			int currentArrayIndex = arrayIndex + i;
-
-			array[currentArrayIndex] = _data[i];
+			array[arrayIndex + i] = _data[Count - 1 - i];
 		}
 	}
 
