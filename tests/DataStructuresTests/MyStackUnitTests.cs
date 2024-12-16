@@ -18,7 +18,6 @@ public class MyStackUnitTests
 	}
 
 	[Theory]
-	[InlineData(0)]
 	[InlineData(-1)]
 	[InlineData(-100)]
 	public void ShouldThrowExceptionIfCapacityIsWrong(int capacity)

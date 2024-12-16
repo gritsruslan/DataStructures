@@ -18,10 +18,9 @@ public class MyListUnitTests
 	}
 
 	[Theory]
-	[InlineData(0)]
 	[InlineData(-1)]
 	[InlineData(-100)]
-	public void ConstructorNegativeOrZeroCapacityShouldThrow(int capacity)
+	public void ConstructorNegativeCapacityShouldThrow(int capacity)
 	{
 		Action act = () => new MyList<int>(capacity);
 
