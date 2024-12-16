@@ -89,7 +89,7 @@ public class MyList<T> : IList<T>
 		if (array.Rank > 1)
 			throw new ArgumentException();
 
-		int arrayCapacity = array.Length - arrayIndex - 1;
+		int arrayCapacity = array.Length - arrayIndex;
 
 		if(arrayCapacity < Count)
 			throw new ArgumentException();
