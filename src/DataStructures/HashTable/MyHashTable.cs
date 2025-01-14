@@ -7,14 +7,14 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 
 	private MyLinkedList<KeyAndValue>?[] _values;
 
-	private int Capacity => _values.Length;
+	public int Capacity => _values.Length;
 
 	private const int DefaultCapacity = 5;
 
 	private const float Factor = 0.75f;
 	public int Count { get; private set; }
 
-	private int GetIndex(int hash) => hash % Capacity;
+	private int GetIndex(int hash) => Math.Abs(hash) % Capacity;
 
 	private float GetPercentageOfOccupancy() =>  (float) Count / Capacity;
 
@@ -38,16 +38,26 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 			ExtendCapacity();
 
 		var index = GetIndex(key.GetHashCode());
-		var keyAndValue = new KeyAndValue(key, value);
+		var linkedList = _values[index];
 
-		if (_values[index] is null)
+		if (linkedList is null)
 		{
 			_values[index] = new MyLinkedList<KeyAndValue>();
-			_values[index]!.Add(keyAndValue);
+			_values[index]!.Add(new KeyAndValue(key, value));
 			return;
 		}
 
-		_values[index]!.Add(keyAndValue);
+		foreach (var kv in linkedList)
+		{
+			if (kv.Key.Equals(key))
+			{
+				kv.Value = value;
+				return;
+			}
+		}
+
+		Count++;
+		_values[index]!.Add(new KeyAndValue(key, value));
 	}
 
 	public TValue GetValue(TKey key)
@@ -93,7 +103,11 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		var index = GetIndex(key.GetHashCode());
 		var linkedList = _values[index]
 		                 ?? throw new ArgumentException(InvalidKeyMessage);
-		return linkedList.Remove(keyAndValue => keyAndValue.Key.Equals(key));
+		var result = linkedList.Remove(keyAndValue => keyAndValue.Key.Equals(key));
+
+		if (result) Count--;
+
+		return result;
 	}
 
 	private void ExtendCapacity()
@@ -120,10 +134,10 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		}
 	}
 
-	public readonly struct KeyAndValue(TKey key, TValue value)
+	public class KeyAndValue(TKey key, TValue value)
 	{
 		public TKey Key { get; } = key;
 
-		public TValue Value { get; } = value;
+		public TValue Value { get; set; } = value;
 	}
 }
