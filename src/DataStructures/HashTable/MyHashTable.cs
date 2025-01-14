@@ -4,18 +4,21 @@ namespace DataStructures.HashTable;
 
 public class MyHashTable<TKey, TValue> where TKey : notnull
 {
-
+	// Array of linked lists that store values whose keys yield the same hash
 	private MyLinkedList<KeyAndValue>?[] _values;
 
 	public int Capacity => _values.Length;
 
 	private const int DefaultCapacity = 5;
 
+	// Array filling factor for expansion
 	private const float Factor = 0.75f;
 	public int Count { get; private set; }
 
+	// Calculate index of linkedList in _values using key hash
 	private int GetIndex(int hash) => Math.Abs(hash) % Capacity;
 
+	// Calculate percentage of occupancy of _values to expand the array
 	private float GetPercentageOfOccupancy() =>  (float) Count / Capacity;
 
 	private const string InvalidKeyMessage = "There are no value with such a key in hash-table.";
@@ -31,7 +34,6 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		set => AddOrUpdate(key, value);
 	}
 
-
 	public void AddOrUpdate(TKey key, TValue value)
 	{
 		if(GetPercentageOfOccupancy() > Factor)
@@ -40,6 +42,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		var index = GetIndex(key.GetHashCode());
 		var linkedList = _values[index];
 
+		// if linkedList does not exist, create new
 		if (linkedList is null)
 		{
 			_values[index] = new MyLinkedList<KeyAndValue>();
@@ -47,8 +50,10 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 			return;
 		}
 
+		// if linkedList with such a key already exist
 		foreach (var kv in linkedList)
 		{
+			// update keyValuePair
 			if (kv.Key.Equals(key))
 			{
 				kv.Value = value;
@@ -110,13 +115,16 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		return result;
 	}
 
+	// Extends the array of hash table linked lists n = floor ( n / 2 )
 	private void ExtendCapacity()
 	{
 		if(Capacity == Array.MaxLength)
 			return;
 
+		// uint to prevent arithmetic overflow
 		var newCapacity = (uint) (Capacity + Capacity / 2);
 
+		// if new capacity is bigger than max acceptable length
 		if (newCapacity > Array.MaxLength)
 			newCapacity = (uint) Array.MaxLength;
 
@@ -124,6 +132,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		_values = new MyLinkedList<KeyAndValue>[newCapacity];
 		Count = 0;
 
+		// Copy all keyValuePairs from old array to new
 		foreach (var linkedList in oldValues)
 		{
 			if(linkedList is null)
@@ -134,6 +143,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		}
 	}
 
+	// KeyValuePair analog
 	public class KeyAndValue(TKey key, TValue value)
 	{
 		public TKey Key { get; } = key;
