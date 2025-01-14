@@ -183,6 +183,31 @@ public class MyLinkedList<T> : ICollection<T>
 		return true;
 	}
 
+	public bool Remove(Predicate<T> predicate)
+	{
+		var (previous, current) = FindNode(predicate);
+
+		if (current is null)
+			return false;
+
+		if (current == _first)
+		{
+			_first = _first.Next;
+		}
+		else if (current == _last)
+		{
+			previous!.Next = null;
+			_last = previous;
+		}
+		else
+		{
+			previous!.Next = current.Next;
+		}
+
+		Count--;
+		return true;
+	}
+
 	public void Clear()
 	{
 		_first = null;
@@ -218,11 +243,24 @@ public class MyLinkedList<T> : ICollection<T>
 		}
 	}
 
+	private (MyLinkedListNode<T>? previousNode, MyLinkedListNode<T>? currentNode) FindNode(T itemToFind)
+	{
+		Predicate<T> predicate = item =>
+		{
+			if (item is null)
+				return itemToFind is null;
+
+			return item.Equals(itemToFind);
+		};
+
+		return FindNode(predicate);
+	}
+
 	// Returns (null , null) if linkedList is empty
 	// Returns (node, null) if element didnt find
 	// Returns (null, node) if firstNode
 	// Returns (node, node) if not firstNode
-	private (MyLinkedListNode<T>? previousNode, MyLinkedListNode<T>? currentNode) FindNode(T itemToFind)
+	private (MyLinkedListNode<T>? previousNode, MyLinkedListNode<T>? currentNode) FindNode(Predicate<T> predicate)
 	{
 		if (IsEmpty)
 			return (null, null);
@@ -232,13 +270,7 @@ public class MyLinkedList<T> : ICollection<T>
 
 		do
 		{
-			if (current!.Value is null)
-			{
-				if (itemToFind is null)
-					break;
-			}
-
-			if (current.Value!.Equals(itemToFind))
+			if(predicate.Invoke(current!.Value))
 				break;
 
 			previous = current;
@@ -248,6 +280,7 @@ public class MyLinkedList<T> : ICollection<T>
 
 		return (previous, current);
 	}
+
 	private void ThrowIfLinkedListIsEmpty()
 	{
 		if (IsEmpty)
