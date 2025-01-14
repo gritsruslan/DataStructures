@@ -16,7 +16,9 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 
 	private int GetIndex(int hash) => hash % Capacity;
 
-	private float GetPercentageOfOccupancy() =>  (float) Capacity / Count;
+	private float GetPercentageOfOccupancy() =>  (float) Count / Capacity;
+
+	private const string InvalidKeyMessage = "There are no value with such a key in hash-table.";
 
 	public MyHashTable()
 	{
@@ -51,7 +53,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 	public TValue GetValue(TKey key)
 	{
 		var index = GetIndex(key.GetHashCode());
-		var linkedList = _values[index] ?? throw new Exception();
+		var linkedList = _values[index] ?? throw new ArgumentException(InvalidKeyMessage);
 
 		foreach (var keyAndValue in linkedList)
 		{
@@ -59,7 +61,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 				return keyAndValue.Value;
 		}
 
-		throw new Exception();  // TODO
+		throw new ArgumentException(InvalidKeyMessage);
 	}
 
 	public bool HasKey(TKey key) => TryGetValue(key, out _);
@@ -89,7 +91,8 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 	public bool Remove(TKey key)
 	{
 		var index = GetIndex(key.GetHashCode());
-		var linkedList = _values[index] ?? throw new Exception(); // TODO
+		var linkedList = _values[index]
+		                 ?? throw new ArgumentException(InvalidKeyMessage);
 		return linkedList.Remove(keyAndValue => keyAndValue.Key.Equals(key));
 	}
 
@@ -107,7 +110,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 		_values = new MyLinkedList<KeyAndValue>[newCapacity];
 		Count = 0;
 
-		foreach (var linkedList in _values)
+		foreach (var linkedList in oldValues)
 		{
 			if(linkedList is null)
 				continue;

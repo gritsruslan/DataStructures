@@ -1,6 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿
 
-using DataStructures.LinkedList;
-using DataStructures.Stack;
-MyStack<int> stack = new[] { 1, 2, 3, };
 
+
+using DataStructures.HashTable;
+
+var hashTable = new MyHashTable<int, string>();
+
+for (int i = 0; i < 10; i++)
+{
+	hashTable.AddOrUpdate(i, $"Value {i}");
+}
+
+for (int i = 0; i < 10; i++)
+{
+	Console.WriteLine($"{i} : {hashTable.GetValue(i)}");
+}
