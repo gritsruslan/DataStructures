@@ -4,14 +4,9 @@
 
 using DataStructures.HashTable;
 
-var hashTable = new MyHashTable<int, string>();
+var hashTable = new MyHashTable<string, int>();
 
-for (int i = 0; i < 10; i++)
-{
-	hashTable.AddOrUpdate(i, $"Value {i}");
-}
+hashTable.AddOrUpdate("one", 1);
+hashTable.AddOrUpdate("one", 2);
 
-for (int i = 0; i < 10; i++)
-{
-	Console.WriteLine($"{i} : {hashTable.GetValue(i)}");
-}
+Console.WriteLine(hashTable["one"]);

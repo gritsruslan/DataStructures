@@ -91,9 +91,7 @@ public class BinarySearchTreeNode<T>
 			rightHeight += Right.Height();
 		}
 
-		int max = rightHeight > leftHeight ? rightHeight : leftHeight;
-
-		return max;
+		return Math.Max(rightHeight, leftHeight);
 	}
 
 	public List<T> InOrder(List<T> list)
@@ -105,6 +103,7 @@ public class BinarySearchTreeNode<T>
 		return list;
 	}
 
+	//TODO
 	public BinarySearchTreeNode<T>? DeleteNode(T item)
 	{
 		if (Value.CompareTo(item) == 1)
@@ -127,6 +126,7 @@ public class BinarySearchTreeNode<T>
 		return this;
 	}
 
+	//TODO
 	private BinarySearchTreeNode<T> FindSuggestion()
 	{
 		var current = Right!;
@@ -157,6 +157,24 @@ public class BinarySearchTreeNode<T>
 			Left.Add(value);
 	}
 
+	//TODO
+	public void Add2(T value)
+	{
+		if (Value.CompareTo(value) == 0) {
+
+			if(Left is null)
+				Left = new BinarySearchTreeNode<T>(value);
+			else Left.Add2(value);
+
+			return;
+		}
+
+		if (Right is null)
+			Right = new BinarySearchTreeNode<T>(value);
+		else
+			Right.Add2(value);
+	}
+
 	public bool Search(T value)
 	{
 		if (Left is null && Right is null)
@@ -165,23 +183,11 @@ public class BinarySearchTreeNode<T>
 		if (Value.CompareTo(value) == 0)
 			return true;
 
-		if (Left is not null)
-		{
-			if (Left.Value.CompareTo(value) == 0)
-				return true;
+		if (Left is not null && Left.Value.CompareTo(value) == 1)
+			return Left.Search(value);
 
-			if (Left.Value.CompareTo(value) == 1)
-				return Left.Search(value);
-		}
-
-		if (Right is not null)
-		{
-			if (Right.Value.CompareTo(value) == 0)
-				return true;
-
-			if (Right.Value.CompareTo(value) == 1)
-				return Right.Search(value);
-		}
+		if (Right is not null && Right.Value.CompareTo(value) == 1)
+			return Right.Search(value);
 
 		return false;
 	}

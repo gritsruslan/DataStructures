@@ -9,6 +9,7 @@ public class BitVector
 
 	public readonly int Size;
 
+	// Uint bit size (32)
 	private const int UintSize = sizeof(uint) * 8;
 
 	// Create BitVector with specified size
