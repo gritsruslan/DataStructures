@@ -32,17 +32,9 @@ public class BinarySearchTree<T>
 		if (Root is null)
 			return false;
 
+		Count--;
 		return Root.Remove(value);
 	}
-
-	public int Height()
-	{
-		if (Root is null)
-			return 0;
-
-		return Height() + 1;
-	}
-
 
 	public List<T> InOrder()
 	{
@@ -71,27 +63,7 @@ public class BinarySearchTreeNode<T>
 	public bool Remove(T item)
 	{
 		var node = DeleteNode(item);
-		return node is null;
-	}
-
-	public int Height()
-	{
-		int leftHeight = 0;
-		int rightHeight = 0;
-
-		if (Left is not null)
-		{
-			leftHeight++;
-			leftHeight += Left.Height();
-		}
-
-		if (Right is not null)
-		{
-			rightHeight++;
-			rightHeight += Right.Height();
-		}
-
-		return Math.Max(rightHeight, leftHeight);
+		return node is not null;
 	}
 
 	public List<T> InOrder(List<T> list)
@@ -103,30 +75,29 @@ public class BinarySearchTreeNode<T>
 		return list;
 	}
 
-	//TODO
-	public BinarySearchTreeNode<T>? DeleteNode(T item)
+
+	public BinarySearchTreeNode<T>? DeleteNode(T value)
 	{
-		if (Value.CompareTo(item) == 1)
-			return Left?.DeleteNode(item) ?? null;
+		if (Value.CompareTo(value) > 0)
+			Left = Left?.DeleteNode(value) ?? null;
+		else if (Value.CompareTo(value) < 0)
+			Right = Right?.DeleteNode(value) ?? null;
+		else
+		{
+			if (Left is null)
+				return Right;
 
-		if (Value.CompareTo(item) == -1)
-			return Right?.DeleteNode(item) ?? null;
+			if (Right is null)
+				return Left;
 
-		if (Left is null)
-			return Right;
-
-		if (Right is null)
-			return Left;
-
-		var suggestion = FindSuggestion();
-
-		Value = suggestion.Value;
-		Right = Right.DeleteNode(Value);
+			var suggestion = FindSuggestion();
+			Value = suggestion.Value;
+			Right = Right.DeleteNode(Value);
+		}
 
 		return this;
 	}
 
-	//TODO
 	private BinarySearchTreeNode<T> FindSuggestion()
 	{
 		var current = Right!;
@@ -139,56 +110,33 @@ public class BinarySearchTreeNode<T>
 
 	public void Add(T value)
 	{
-		if (Left is null)
+		if (value.CompareTo(Value) > 0)
 		{
-			Left = new BinarySearchTreeNode<T>(value);
-			return;
+			if(Right is null)
+				Right = new BinarySearchTreeNode<T>(value);
+			else
+				Right.Add(value);
 		}
-
-		if (Right is null)
-		{
-			Right = new BinarySearchTreeNode<T>(value);
-			return;
-		}
-
-		if(Right.Value.CompareTo(value) == 1)
-			Right.Add(value);
 		else
-			Left.Add(value);
-	}
-
-	//TODO
-	public void Add2(T value)
-	{
-		if (Value.CompareTo(value) == 0) {
-
-			if(Left is null)
+		{
+			if (Left is null)
 				Left = new BinarySearchTreeNode<T>(value);
-			else Left.Add2(value);
-
-			return;
+			else
+				Left.Add(value);
 		}
-
-		if (Right is null)
-			Right = new BinarySearchTreeNode<T>(value);
-		else
-			Right.Add2(value);
 	}
 
 	public bool Search(T value)
 	{
+		if (value.CompareTo(Value) == 0)
+			return true;
+
 		if (Left is null && Right is null)
 			return false;
 
-		if (Value.CompareTo(value) == 0)
-			return true;
+		if (value.CompareTo(Value) > 0)
+			return Right?.Search(value) ?? false;
 
-		if (Left is not null && Left.Value.CompareTo(value) == 1)
-			return Left.Search(value);
-
-		if (Right is not null && Right.Value.CompareTo(value) == 1)
-			return Right.Search(value);
-
-		return false;
+		return Left?.Search(value) ?? false;
 	}
 }
