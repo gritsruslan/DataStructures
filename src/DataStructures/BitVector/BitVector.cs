@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace DataStructures.BitVector;
 
 public class BitVector
@@ -82,6 +80,6 @@ public class BitVector
 	private void ThrowIfIndexOutOfRange(int index)
 	{
 		if (index < 0 || index >= Size)
-			throw new IndexOutOfRangeException($"BitVector size is {Size}, but the element with index {index} is requested");
+			throw new IndexOutOfRangeException($"BitVector size is {Size}, but the element with index {index} was requested");
 	}
 }

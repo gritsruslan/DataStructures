@@ -122,7 +122,7 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
 			return;
 
 		// uint to prevent arithmetic overflow
-		var newCapacity = (uint) (Capacity + Capacity / 2);
+		var newCapacity = (uint) Math.Ceiling(Capacity * 1.5);
 
 		// if new capacity is bigger than max acceptable length
 		if (newCapacity > Array.MaxLength)

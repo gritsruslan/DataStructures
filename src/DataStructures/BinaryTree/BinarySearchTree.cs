@@ -1,9 +1,10 @@
 namespace DataStructures.BinaryTree;
 
+// Binary search tree implementation
 public class BinarySearchTree<T>
 	where T : IComparable<T>
 {
-	private BinarySearchTreeNode<T>? Root { get; set; }
+	private BinarySearchTreeNode? Root { get; set; }
 
 	public int Count { get; private set; }
 
@@ -12,7 +13,7 @@ public class BinarySearchTree<T>
 	public void Add(T value)
 	{
 		if (Root is null)
-			Root = new BinarySearchTreeNode<T>(value);
+			Root = new BinarySearchTreeNode(value);
 		else
 			Root.Add(value);
 
@@ -43,100 +44,94 @@ public class BinarySearchTree<T>
 
 		return Root.InOrder(new List<T>(Count));
 	}
-}
 
-public class BinarySearchTreeNode<T>
-	where T : IComparable<T>
-{
-	public T Value { get; private set; }
-
-	private BinarySearchTreeNode<T>? Left { get; set; }
-
-	private BinarySearchTreeNode<T>? Right { get; set; }
-
-
-	public BinarySearchTreeNode(T value)
+	internal class BinarySearchTreeNode(T value)
 	{
-		Value = value;
-	}
+    	public T Value { get; private set; } = value;
 
-	public bool Remove(T item)
-	{
-		var node = DeleteNode(item);
-		return node is not null;
-	}
+	    private BinarySearchTreeNode? Left { get; set; }
 
-	public List<T> InOrder(List<T> list)
-	{
-		Left?.InOrder(list);
-		list.Add(Value);
-		Right?.InOrder(list);
-
-		return list;
-	}
+    	private BinarySearchTreeNode? Right { get; set; }
 
 
-	public BinarySearchTreeNode<T>? DeleteNode(T value)
-	{
-		if (Value.CompareTo(value) > 0)
-			Left = Left?.DeleteNode(value) ?? null;
-		else if (Value.CompareTo(value) < 0)
-			Right = Right?.DeleteNode(value) ?? null;
-		else
-		{
-			if (Left is null)
-				return Right;
+	    public bool Remove(T item)
+    	{
+    		var node = DeleteNode(item);
+    		return node is not null;
+    	}
 
-			if (Right is null)
-				return Left;
+    	public List<T> InOrder(List<T> list)
+    	{
+    		Left?.InOrder(list);
+    		list.Add(Value);
+    		Right?.InOrder(list);
 
-			var suggestion = FindSuggestion();
-			Value = suggestion.Value;
-			Right = Right.DeleteNode(Value);
-		}
+    		return list;
+    	}
 
-		return this;
-	}
 
-	private BinarySearchTreeNode<T> FindSuggestion()
-	{
-		var current = Right!;
+    	public BinarySearchTreeNode? DeleteNode(T value)
+    	{
+    		if (Value.CompareTo(value) > 0)
+    			Left = Left?.DeleteNode(value) ?? null;
+    		else if (Value.CompareTo(value) < 0)
+    			Right = Right?.DeleteNode(value) ?? null;
+    		else
+    		{
+    			if (Left is null)
+    				return Right;
 
-		while (current.Left != null)
-			current = current.Left;
+    			if (Right is null)
+    				return Left;
 
-		return current;
-	}
+    			var suggestion = FindSuggestion();
+    			Value = suggestion.Value;
+    			Right = Right.DeleteNode(Value);
+    		}
 
-	public void Add(T value)
-	{
-		if (value.CompareTo(Value) > 0)
-		{
-			if(Right is null)
-				Right = new BinarySearchTreeNode<T>(value);
-			else
-				Right.Add(value);
-		}
-		else
-		{
-			if (Left is null)
-				Left = new BinarySearchTreeNode<T>(value);
-			else
-				Left.Add(value);
-		}
-	}
+    		return this;
+    	}
 
-	public bool Search(T value)
-	{
-		if (value.CompareTo(Value) == 0)
-			return true;
+    	private BinarySearchTreeNode FindSuggestion()
+    	{
+    		var current = Right!;
 
-		if (Left is null && Right is null)
-			return false;
+    		while (current.Left != null)
+    			current = current.Left;
 
-		if (value.CompareTo(Value) > 0)
-			return Right?.Search(value) ?? false;
+    		return current;
+    	}
 
-		return Left?.Search(value) ?? false;
-	}
+    	public void Add(T value)
+    	{
+    		if (value.CompareTo(Value) > 0)
+    		{
+    			if(Right is null)
+    				Right = new BinarySearchTreeNode(value);
+    			else
+    				Right.Add(value);
+    		}
+    		else
+    		{
+    			if (Left is null)
+    				Left = new BinarySearchTreeNode(value);
+    			else
+    				Left.Add(value);
+    		}
+    	}
+
+    	public bool Search(T value)
+    	{
+    		if (value.CompareTo(Value) == 0)
+    			return true;
+
+    		if (Left is null && Right is null)
+    			return false;
+
+    		if (value.CompareTo(Value) > 0)
+    			return Right?.Search(value) ?? false;
+
+    		return Left?.Search(value) ?? false;
+    	}
+    }
 }

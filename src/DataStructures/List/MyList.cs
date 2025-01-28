@@ -2,6 +2,7 @@ using System.Collections;
 
 namespace DataStructures.List;
 
+// Custom List<T> implementation
 public class MyList<T> : IList<T>
 {
 	private const int DefaultCapacity = 5;
@@ -72,7 +73,7 @@ public class MyList<T> : IList<T>
 	public void Add(T item)
 	{
 		if(Count == Capacity)
-			ResizeArray();
+			ExtendCapacity();
 
 		_data[Count] = item;
 		Count++;
@@ -89,15 +90,15 @@ public class MyList<T> : IList<T>
 	public void CopyTo(T[] array, int arrayIndex)
 	{
 		if (arrayIndex < 0 || arrayIndex >= array.Length)
-			throw new ArgumentOutOfRangeException();
+			throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
 		if (array.Rank > 1)
-			throw new ArgumentException();
+			throw new ArgumentException("Invalid rank in array to copy from list!");
 
 		int arrayCapacity = array.Length - arrayIndex;
 
 		if(arrayCapacity < Count)
-			throw new ArgumentException();
+			throw new ArgumentException("Not enough capacity to copy from list!");
 
 		for (int i = 0; i < Count; i++)
 		{
@@ -145,7 +146,7 @@ public class MyList<T> : IList<T>
 		ThrowIfIndexOutOfRange(index);
 
 		if(Count == Capacity)
-			ResizeArray();
+			ExtendCapacity();
 
 		for (int i = Count; i > index; i--)
 		{
@@ -168,18 +169,18 @@ public class MyList<T> : IList<T>
 		Count--;
 	}
 
-	private void ResizeArray()
+	private void ExtendCapacity()
 	{
-		if (Capacity == int.MaxValue)
-			throw new Exception();
+		if (Capacity == Array.MaxLength)
+			throw new Exception("List is full!");
 
-		uint newArraySize = Capacity == 0 ? DefaultCapacity :
-			(uint)(Capacity + Math.Ceiling(Capacity / 2.0));
+		uint newArraySize = Capacity < DefaultCapacity ? DefaultCapacity :
+			(uint)Math.Ceiling(Capacity * 1.5);
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;
 
-		T[] newData = new T[newArraySize];
+		var newData = new T[newArraySize];
 
 		Array.Copy(_data, newData, Count);
 		_data = newData;
@@ -191,7 +192,7 @@ public class MyList<T> : IList<T>
 	private void ThrowIfIndexOutOfRange(int index)
 	{
 		if (index < 0 || index >= Count)
-			throw new IndexOutOfRangeException();
+			throw new IndexOutOfRangeException("Index out of range in list!");
 	}
 
 	private struct MyListEnumerator : IEnumerator<T>
@@ -211,7 +212,7 @@ public class MyList<T> : IList<T>
 			get
 			{
 				if (_index < 0 || _index >= _list.Count)
-					throw new InvalidOperationException();
+					throw new InvalidOperationException("Invalid index!");
 
 				return _list[_index];
 			}

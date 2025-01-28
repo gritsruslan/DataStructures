@@ -4,9 +4,9 @@ namespace DataStructures.LinkedList;
 
 public class MyLinkedList<T> : ICollection<T>
 {
-	private MyLinkedListNode<T>? _first;
+	private MyLinkedListNode? _first;
 
-	private MyLinkedListNode<T>? _last;
+	private MyLinkedListNode? _last;
 
 	public T First
 	{
@@ -47,9 +47,9 @@ public class MyLinkedList<T> : ICollection<T>
 		var ( _ , current) = FindNode(itemToFind);
 
 		if (current == null)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Cannot add after because there are no such an item!");
 
-		var newNode = new MyLinkedListNode<T>(itemToAdd);
+		var newNode = new MyLinkedListNode(itemToAdd);
 
 		if (current.Next is null)
 		{
@@ -71,7 +71,7 @@ public class MyLinkedList<T> : ICollection<T>
 		var (previous, current) = FindNode(itemToFind);
 
 		if (current is null)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Cannot add before because there are no such an item!");
 
 		if (previous is null)
 		{
@@ -79,7 +79,7 @@ public class MyLinkedList<T> : ICollection<T>
 			return;
 		}
 
-		var newNode = new MyLinkedListNode<T>(itemToAdd, current);
+		var newNode = new MyLinkedListNode(itemToAdd, current);
 		previous.Next = newNode;
 		Count++;
 	}
@@ -88,13 +88,13 @@ public class MyLinkedList<T> : ICollection<T>
 	{
 		if (IsEmpty)
 		{
-			var newNode = new MyLinkedListNode<T>(item);
+			var newNode = new MyLinkedListNode(item);
 			_first = newNode;
 			_last = newNode;
 		}
 		else
 		{
-			_first = new MyLinkedListNode<T>(item, _first);
+			_first = new MyLinkedListNode(item, _first);
 		}
 
 		Count++;
@@ -104,13 +104,13 @@ public class MyLinkedList<T> : ICollection<T>
 	{
 		if (IsEmpty)
 		{
-			var newNode = new MyLinkedListNode<T>(item);
+			var newNode = new MyLinkedListNode(item);
 			_first = newNode;
 			_last = newNode;
 		}
 		else
 		{
-			var newNode = new MyLinkedListNode<T>(item);
+			var newNode = new MyLinkedListNode(item);
 			_last!.Next = newNode;
 			_last = newNode;
 		}
@@ -227,7 +227,7 @@ public class MyLinkedList<T> : ICollection<T>
 		int arrayCapacity = array.Length - arrayIndex;
 
 		if (arrayCapacity < Count)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Not enough capacity to copy from linkedList!");
 
 		if(IsEmpty)
 			return;
@@ -243,7 +243,7 @@ public class MyLinkedList<T> : ICollection<T>
 		}
 	}
 
-	private (MyLinkedListNode<T>? previousNode, MyLinkedListNode<T>? currentNode) FindNode(T itemToFind)
+	private (MyLinkedListNode? previousNode, MyLinkedListNode? currentNode) FindNode(T itemToFind)
 	{
 		Predicate<T> predicate = item =>
 		{
@@ -260,13 +260,13 @@ public class MyLinkedList<T> : ICollection<T>
 	// Returns (node, null) if element didnt find
 	// Returns (null, node) if firstNode
 	// Returns (node, node) if not firstNode
-	private (MyLinkedListNode<T>? previousNode, MyLinkedListNode<T>? currentNode) FindNode(Predicate<T> predicate)
+	private (MyLinkedListNode? previousNode, MyLinkedListNode? currentNode) FindNode(Predicate<T> predicate)
 	{
 		if (IsEmpty)
 			return (null, null);
 
-		MyLinkedListNode<T>? previous = null;
-		MyLinkedListNode<T>? current = _first;
+		MyLinkedListNode? previous = null;
+		MyLinkedListNode? current = _first;
 
 		do
 		{
@@ -284,7 +284,7 @@ public class MyLinkedList<T> : ICollection<T>
 	private void ThrowIfLinkedListIsEmpty()
 	{
 		if (IsEmpty)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Linked list is empty!");
 	}
 
 	public IEnumerator<T> GetEnumerator()
@@ -304,4 +304,11 @@ public class MyLinkedList<T> : ICollection<T>
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 	public static implicit operator MyLinkedList<T>(T[] array) => new(array);
+
+	private class MyLinkedListNode(T value, MyLinkedListNode? next = null)
+    {
+    	public T Value { get; } = value;
+
+    	public MyLinkedListNode? Next { get; set; } = next;
+    }
 }

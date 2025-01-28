@@ -1,12 +1,19 @@
 ﻿
 
-
-
+using DataStructures.BinaryTree;
 using DataStructures.HashTable;
 
-var hashTable = new MyHashTable<string, int>();
+var bst = new BinarySearchTree<int>();
 
-hashTable.AddOrUpdate("one", 1);
-hashTable.AddOrUpdate("one", 2);
+for (int i = 0; i < 5; i++)
+	bst.Add(i);
 
-Console.WriteLine(hashTable["one"]);
+Stack<int> c = new Stack<int>();
+c.Push(1);
+
+for (int i = 5 - 1; i >= 0; i--)
+{
+	Console.WriteLine($"{i} : {bst.Search(i)}");
+}
+
+

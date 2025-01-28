@@ -28,7 +28,7 @@ public class MyStackUnitTests
 
 	// Resize
 	[Theory]
-	[InlineData(1, 2)]
+	[InlineData(1, 5)]
 	[InlineData(5, 8)]
 	[InlineData(100, 150)]
 	public void ShouldCorrectResizeArray(int capacity, int nextCapacity)

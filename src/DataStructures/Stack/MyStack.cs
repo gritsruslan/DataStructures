@@ -16,10 +16,6 @@ public class MyStack<T> : IEnumerable<T>
 
 	public int Count { get; private set; }
 
-	public bool IsSynchronized => false;
-
-	public object SyncRoot => this;
-
 	public MyStack()
 	{
 		_data = new T[DefaultCapacity];
@@ -66,7 +62,7 @@ public class MyStack<T> : IEnumerable<T>
 	public void Push(T item)
 	{
 		if(Count == Capacity)
-			ResizeArray();
+			ExtendCapacity();
 
 		_data[Count] = item;
 		Count++;
@@ -119,15 +115,15 @@ public class MyStack<T> : IEnumerable<T>
 	public void CopyTo(T[] array, int arrayIndex)
 	{
 		if (arrayIndex < 0 || arrayIndex >= array.Length)
-			throw new ArgumentOutOfRangeException();
+			throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
 		if (array.Rank > 1)
-			throw new ArgumentException();
+			throw new ArgumentException("Invalid rank in array to copy from stack!");
 
 		int arrayCapacity = array.Length - arrayIndex;
 
 		if(arrayCapacity < Count)
-			throw new ArgumentException();
+			throw new ArgumentException("Not enough capacity to copy!");
 
 		for (int i = 0; i < Count; i++)
 		{
@@ -146,16 +142,16 @@ public class MyStack<T> : IEnumerable<T>
 	private void ThrowIfStackIsEmpty()
 	{
 		if (IsEmpty)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Stack is empty!");
 	}
 
-	private void ResizeArray()
+	private void ExtendCapacity()
 	{
-		if (Capacity == int.MaxValue)
-			throw new Exception();
+		if (Capacity == Array.MaxLength)
+			throw new InvalidOperationException("Stack is full!");
 
-		uint newArraySize = Capacity == 0 ? DefaultCapacity :
-			(uint)(Capacity + Math.Ceiling(Capacity / 2.0));
+		uint newArraySize = Capacity < DefaultCapacity ? DefaultCapacity :
+			(uint) Math.Ceiling(Capacity * 1.5);
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;

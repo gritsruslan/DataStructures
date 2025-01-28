@@ -1,13 +1,7 @@
 namespace DataStructures.BinaryHeap;
 
-public enum HeapType
-{
-	MinHeap,
-	MaxHeap
-}
-
-
-public class BinaryHeap<T>(HeapType type) where T : IComparable<T>
+public class BinaryHeap<T>(HeapType type)
+	where T : IComparable<T>
 {
 	private const int DefaultCapacity = 5;
 
@@ -26,7 +20,7 @@ public class BinaryHeap<T>(HeapType type) where T : IComparable<T>
 	public void Add(T item)
 	{
 		if(Count == Capacity)
-			Resize();
+			ExtendCapacity();
 
 		_data[Count] = item;
 		HeapifyUp(Count);
@@ -122,13 +116,13 @@ public class BinaryHeap<T>(HeapType type) where T : IComparable<T>
 			first.CompareTo(second) == 1 : first.CompareTo(second) == -1;
 	}
 
-	private void Resize()
+	private void ExtendCapacity()
 	{
-		if (Capacity == int.MaxValue)
-			throw new Exception();
+		if (Capacity == Array.MaxLength)
+			throw new InvalidOperationException("Heap is full!");
 
-		uint newArraySize = Capacity == 0 ? DefaultCapacity :
-			(uint)(Capacity + Capacity / 2);
+		uint newArraySize = Capacity < DefaultCapacity ? DefaultCapacity :
+			(uint)Math.Ceiling(Capacity * 1.5);
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;
@@ -148,6 +142,6 @@ public class BinaryHeap<T>(HeapType type) where T : IComparable<T>
 	private void ThrowIfEmpty()
 	{
 		if (IsEmpty)
-			throw new ArgumentOutOfRangeException();
+			throw new Exception("Heap is empty!");
 	}
 }

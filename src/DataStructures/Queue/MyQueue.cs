@@ -63,7 +63,7 @@ public class MyQueue<T> : IEnumerable<T>
 	public void Enqueue(T item)
 	{
 		if (Count == Capacity)
-			ResizeArray();
+			ExtendCapacity();
 
 		_data[_tail] = item;
 		_tail++;
@@ -118,16 +118,16 @@ public class MyQueue<T> : IEnumerable<T>
 	private void ThrowIfQueueIsEmpty()
 	{
 		if(Count == 0)
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("Queue is empty!");
 	}
 
-	private void ResizeArray()
+	private void ExtendCapacity()
 	{
-		if (Capacity == int.MaxValue)
-			throw new Exception();
+		if (Capacity == Array.MaxLength)
+			throw new InvalidOperationException("Queue is full!");
 
-		uint newArraySize = Capacity == 0 ? DefaultCapacity :
-			(uint)(Capacity + Math.Ceiling(Capacity / 2.0));
+		uint newArraySize = Capacity < DefaultCapacity ? DefaultCapacity :
+			(uint) Math.Ceiling(Capacity * 1.5);
 
 		if (newArraySize > Array.MaxLength)
 			newArraySize = (uint) Array.MaxLength;
