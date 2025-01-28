@@ -1,13 +1,13 @@
 namespace DataStructures.BinaryHeap;
 
-public class BinaryHeap<T>(HeapType type)
+public class BinaryHeap<T>
 	where T : IComparable<T>
 {
 	private const int DefaultCapacity = 5;
 
-	private T[] _data = new T[DefaultCapacity];
+	private T[] _data;
 
-	private HeapType Type { get; } = type;
+	private HeapType Type { get; }
 
 	public int Capacity => _data.Length;
 
@@ -16,6 +16,19 @@ public class BinaryHeap<T>(HeapType type)
 	public int Height => (int) Math.Ceiling(Math.Log2(Count));
 
 	public int Count { get; private set; }
+
+	public BinaryHeap(HeapType type, int capacity)
+	{
+		ArgumentOutOfRangeException.ThrowIfNegative(capacity);
+		Type = type;
+		_data = new T[capacity];
+	}
+
+	public BinaryHeap(HeapType type)
+	{
+		Type = type;
+		_data = new T[DefaultCapacity];
+	}
 
 	public void Add(T item)
 	{
