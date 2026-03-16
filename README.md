@@ -1,6 +1,6 @@
 # DataStructures
 
-Implementation of basic data structures created for educational purposes
+Implementation of basic data structures created for education purposes
 
 Already implemented:
 
@@ -12,3 +12,5 @@ Already implemented:
 6. BinarySearchTree
 7. BinaryHeap
 8. HashTable
+
+These implementations for data structures may not function correctly. They should not be used in real production projects.
